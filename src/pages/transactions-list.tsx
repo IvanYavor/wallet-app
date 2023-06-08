@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import { transactions } from "../transactions.js";
+import transactions from "../transactions.json";
 
 import Balance from "@/components/Balance";
 import DailyPoints from "@/components/DailyPoints";
@@ -12,12 +12,14 @@ import Loader from "@/components/Loader";
 type Transaction = {
   id: number;
   type: string;
-  date: string;
   company: string;
   amount: number;
   description: string;
   sender: string;
+  date: string;
   percent: number;
+  status: string;
+  authorizedUser?: string;
 };
 
 const TransactionsListPage: React.FC = () => {
@@ -34,7 +36,7 @@ const TransactionsListPage: React.FC = () => {
     const fetchTransactions = () => {
       // Simulating an asynchronous API call
       setTimeout(() => {
-        const data: Transaction[] = transactions;
+        const data: Transaction[] = transactions.transactions;
         setTransactions(data);
         setLoading(false); // Set loading to false once data is fetched
       }, 2000);
