@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const PaymentDue: React.FC = () => {
   const currentDate = new Date();
@@ -15,8 +15,8 @@ const PaymentDue: React.FC = () => {
       </div>
       <div className="flex-grow"></div>
       <div className="flex justify-end items-end">
-        <div>
-          <FontAwesomeIcon icon={faCircleCheck} className="text-lg" />
+        <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+          <FontAwesomeIcon icon={faCheck} className="text-black" />
         </div>
       </div>
     </div>
