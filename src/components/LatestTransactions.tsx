@@ -5,11 +5,15 @@ import { faBuilding, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 type Transaction = {
   id: number;
+  type: string;
   company: string;
   amount: number;
   description: string;
   sender: string;
+  date: string;
   percent: number;
+  status: string;
+  authorizedUser?: string;
 };
 
 type TransactionListProps = {
@@ -17,34 +21,79 @@ type TransactionListProps = {
 };
 
 const TransactionList: React.FC<TransactionListProps> = ({ transactions }) => {
+  const formatDate = (date: Date) => {
+    const currentDate = new Date();
+    const currentWeekStart = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - currentDate.getDay()
+    );
+    const currentWeekEnd = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + (6 - currentDate.getDay())
+    );
+
+    console.log("currentWeekStart", currentWeekStart);
+    console.log("currentWeekEnd", currentWeekEnd);
+    console.log("date", date);
+    console.log("currentDate", new Date());
+
+    console.log("bool", date >= currentWeekStart && date <= currentWeekEnd);
+    if (date >= currentWeekStart && date <= currentWeekEnd) {
+      const weekdays = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      return weekdays[date.getDay()];
+    } else {
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const year = date.getFullYear();
+      return `${month}/${day}/${year}`;
+    }
+  };
+
   return (
     <div>
       <h1 className="text-lg font-bold">Latest Transactions</h1>
-      {/* TODO lastest 10 transactions */}
       <div className="overflow-hidden rounded-md">
         {transactions.map((transaction) => (
           <Link key={transaction.id} href={`/transaction/${transaction.id}`}>
-            <div className="flex justify-content p-4 bg-white border-b border-gray-200">
-              <div className="flex items-center justify-center w-12 h-12 mr-4 bg-blue-500 text-white">
-                <FontAwesomeIcon icon={faBuilding} />
-              </div>
-              <div className="flex flex-col mr-2">
-                <div className="text-sm font-bold">{transaction.company}</div>
-                <div className="text-xs text-gray-500">
-                  {transaction.description}
+            <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+              <div className="flex items-center">
+                <div className="w-12 h-12 mr-4 bg-black text-white flex items-center justify-center rounded-md">
+                  <FontAwesomeIcon icon={faBuilding} />
                 </div>
-                <div className="flex items-center">
+                <div className="flex flex-col">
+                  <div className="text-sm font-bold">{transaction.company}</div>
                   <div className="text-xs text-gray-500">
-                    {transaction.sender}
+                    {transaction.status === "Pending" && (
+                      <span className="font-bold text-gray-500">
+                        Pending -{" "}
+                      </span>
+                    )}
+                    {transaction.description}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {transaction.authorizedUser
+                      ? `${transaction.authorizedUser} - `
+                      : ""}
+                    {formatDate(new Date(transaction.date))}
                   </div>
                 </div>
               </div>
-              <div>
-                {/* TODO use localization for amount */}
-                <div className="text-sm font-bold mb-2">
-                  ${transaction.amount}
+              <div className="flex items-center">
+                <div className="text-sm font-bold mr-2">
+                  {transaction.type === "Payment" ? "+" : ""}$
+                  {transaction.amount}
                 </div>
-                <div className="flex justify-center bg-gray-100 text-xs rounded-md">
+                <div className="bg-gray-100 text-xs rounded-md px-2 py-1">
                   {transaction.percent}%
                 </div>
               </div>
