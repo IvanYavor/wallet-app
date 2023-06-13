@@ -34,11 +34,10 @@ const TransactionsListPage: React.FC = () => {
 
   useEffect(() => {
     const fetchTransactions = () => {
-      // Simulating an asynchronous API call
       setTimeout(() => {
         const data: Transaction[] = transactions.transactions;
         setTransactions(data);
-        setLoading(false); // Set loading to false once data is fetched
+        setLoading(false);
       }, 2000);
     };
 
